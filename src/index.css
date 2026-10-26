@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --color-background: #03152F;
+  --color-primary: #0647A5;
+  --color-electric: #168BFF;
+  --color-midnight: #001F52;
+  --color-gold: #D9A441;
+  --color-gold-light: #FFE29A;
+  --color-pearl: #F5F1E6;
+
+  /* Fonts */
+  --font-arabic: 'Amiri', 'Scheherazade New', serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-pearl);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-arabic {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  line-height: 2.2;
+}
+
+.font-arabic-scheherazade {
+  font-family: 'Scheherazade New', serif;
+  direction: rtl;
+  text-align: right;
+  line-height: 2.2;
+}
+
+/* Custom subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #03152F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #001F52;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0647A5;
+}
+
+/* Accessible focus visible */
+*:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}

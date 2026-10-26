@@ -1,0 +1,6 @@
+{
+  "name": "ZQuran",
+  "description": "Aplikasi Al-Qur'an Digital modern, tenang, dan elegan dengan audio 6 qari ternama, terjemahan, tafsir Kemenag RI, auto-scroll tilawah, dan pencarian global.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

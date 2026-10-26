@@ -1,0 +1,2054 @@
+ZQURAN — UI/UX REDESIGN PROMPT
+
+ROLE
+
+Bertindak sebagai:
+
+- Senior UI/UX Designer
+- React Frontend Engineer
+- Mobile App Design Specialist
+- Android UI/UX Specialist
+- Responsive Web/PWA Engineer
+- Interaction Designer
+
+Saya sudah memiliki aplikasi ZQuran yang telah selesai secara fungsional.
+
+Jangan membangun ulang aplikasi dari awal.
+
+Lakukan redesign pada UI/UX yang sudah ada dengan mempertahankan seluruh fungsi, API, data, routing, state management, persistence, audio, bookmark, tafsir, pencarian, dan PWA.
+
+Gunakan screenshot referensi yang saya lampirkan sebagai referensi struktur visual dan perilaku UI, bukan untuk menyalin branding aplikasi lain.
+
+---
+
+1. ATURAN PALING PENTING
+
+JANGAN MENGUBAH IDENTITAS ZQURAN
+
+Pertahankan secara mutlak:
+
+- Nama aplikasi: ZQuran
+- Logo/icon ZQuran yang sudah ada
+- Bentuk dan identitas logo
+- Palet warna ZQuran
+- Data Al-Qur'an
+- API
+- Endpoint
+- Struktur data
+- Fitur aplikasi
+- Routing
+- Authentication logic
+- Bookmark
+- Reading history
+- Audio
+- Tafsir
+- Search
+- PWA configuration
+
+Jangan mengganti logo dengan logo dari screenshot referensi.
+
+Jangan mengganti nama ZQuran.
+
+Jangan mengubah palet utama ZQuran.
+
+Screenshot hanya digunakan sebagai referensi:
+
+- layout
+- spacing
+- hierarchy
+- header
+- tab
+- list
+- interaction
+- scroll behavior
+- settings layout
+- login composition
+
+---
+
+2. ZQURAN DESIGN TOKEN
+
+Gunakan palet ZQuran yang sudah ditentukan:
+
+const ZQURAN_COLORS = {
+  background: "#03152F",
+  primary: "#0647A5",
+  electricBlue: "#168BFF",
+  midnightBlue: "#001F52",
+  gold: "#D9A441",
+  champagneGold: "#FFE29A",
+  pearlWhite: "#F5F1E6"
+};
+
+Jangan membuat gradient.
+
+Jangan menambahkan warna brand baru yang mengubah identitas ZQuran.
+
+Warna tambahan hanya boleh berupa:
+
+- opacity
+- transparansi
+- variasi brightness
+- grayscale untuk state disabled
+- warna semantic untuk error/success jika memang diperlukan
+
+---
+
+3. TARGET VISUAL
+
+Buat ZQuran terasa seperti aplikasi mobile Quran premium:
+
+Minimal
+Elegant
+Calm
+Spiritual
+Modern
+Dark
+Clean
+Highly readable
+Compact
+Professional
+
+Gunakan referensi screenshot untuk mendapatkan karakter:
+
+- dark mobile interface
+- compact header
+- section title
+- list-based navigation
+- thin divider
+- large readable typography
+- subtle active indicator
+- icon-based actions
+- clean settings page
+- simple popup menu
+
+Jangan membuat UI terlalu dekoratif.
+
+---
+
+4. HEADER BARU — SCROLL-AWARE HEADER
+
+Ini adalah perubahan utama.
+
+Buat header ZQuran memiliki perilaku seperti aplikasi mobile native.
+
+Struktur Header
+
+Pada halaman Quran:
+
+┌─────────────────────────────────────────┐
+│ ←  [ZQuran Logo]  Baca Qur'an   actions│
+├─────────────────────────────────────────┤
+│       SURAH       JUZ       BOOKMARK    │
+└─────────────────────────────────────────┘
+
+Header terdiri dari:
+
+Top App Bar
+
+Kiri:
+
+- tombol Back
+- logo ZQuran
+
+Tengah:
+
+- judul halaman
+
+Kanan:
+
+- action yang relevan
+- Search
+- Sort/filter
+- More menu
+
+Jangan menampilkan semua icon pada semua halaman.
+
+Gunakan hanya action yang relevan.
+
+---
+
+5. SCROLL BEHAVIOR
+
+Header harus scroll-aware.
+
+Implementasikan perilaku:
+
+Ketika user scroll DOWN
+
+Top header dapat:
+
+mengecil / collapse
+
+atau
+
+bersembunyi secara smooth
+
+agar area membaca menjadi lebih luas.
+
+Ketika user scroll UP
+
+Header:
+
+muncul kembali
+
+dengan animasi singkat dan halus.
+
+Ketika berada di posisi paling atas
+
+Header:
+
+fully expanded
+
+dan terlihat lengkap.
+
+---
+
+6. STICKY TAB NAVIGATION
+
+Untuk halaman Quran:
+
+SURAH | JUZ | BOOKMARK
+
+Gunakan tab navigation seperti referensi.
+
+Tab aktif menggunakan:
+
+Champagne Gold / Gold
+
+dengan indicator tipis.
+
+Contoh:
+
+SURAH
+──────────────
+
+Tab yang tidak aktif:
+
+- Pearl White dengan opacity lebih rendah
+- tidak terlalu terang
+
+Tab harus tetap mudah disentuh pada layar mobile.
+
+---
+
+7. HEADER ANIMATION
+
+Gunakan animasi ringan.
+
+Jangan menggunakan animasi berlebihan.
+
+Rekomendasi:
+
+transition:
+  transform 180ms ease,
+  opacity 180ms ease,
+  height 180ms ease;
+
+Gunakan transform/opacity daripada layout animation berat jika memungkinkan.
+
+Hormati:
+
+prefers-reduced-motion
+
+Jika user mengaktifkan reduced motion:
+
+disable complex header animation
+
+---
+
+8. HEADER MOBILE
+
+Optimalkan untuk:
+
+320px
+360px
+375px
+390px
+414px
+480px
+
+Jangan sampai:
+
+- judul terpotong
+- icon bertabrakan
+- logo terlalu besar
+- tombol keluar layar
+- tab overflow
+- header menutupi konten
+
+Gunakan safe-area:
+
+padding-top: env(safe-area-inset-top);
+
+jika diperlukan.
+
+---
+
+9. LOGIN UI REDESIGN
+
+Redesign halaman login agar mengikuti bahasa visual ZQuran.
+
+Jangan menggunakan desain login generik.
+
+Struktur
+
+Mobile:
+
+          [ZQuran Logo]
+
+             ZQuran
+
+     Masuk untuk melanjutkan
+     perjalanan membaca Al-Qur'an
+
+ ┌─────────────────────────────┐
+ │ Email / Username            │
+ └─────────────────────────────┘
+
+ ┌─────────────────────────────┐
+ │ Password                 👁 │
+ └─────────────────────────────┘
+
+ ┌─────────────────────────────┐
+ │          MASUK              │
+ └─────────────────────────────┘
+
+        Lupa Password?
+
+ ───────── atau ─────────
+
+ ┌─────────────────────────────┐
+ │     Lanjutkan dengan Google │
+ └─────────────────────────────┘
+
+ Belum memiliki akun?
+          Daftar
+
+Sesuaikan dengan authentication system yang sudah ada.
+
+Jangan membuat authentication palsu.
+
+Jika Google Login sudah tersedia:
+
+gunakan authentication yang sudah ada
+
+Jika belum tersedia:
+
+jangan membuat tombol yang berpura-pura berfungsi
+
+---
+
+10. LOGIN VISUAL STYLE
+
+Background:
+
+#03152F
+
+Logo:
+
+Gunakan logo ZQuran asli yang sudah ada.
+
+Jangan mengganti icon.
+
+Primary CTA:
+
+#0647A5
+
+Accent:
+
+#168BFF
+
+Border/focus:
+
+#D9A441
+
+Highlight:
+
+#FFE29A
+
+Text:
+
+#F5F1E6
+
+Input field:
+
+- dark surface
+- subtle border
+- rounded corner
+- clear focus state
+- large enough touch target
+- password visibility button
+
+---
+
+11. LOGIN CARD
+
+Jangan menggunakan card besar yang terlalu menonjol.
+
+Gunakan:
+
+flat dark surface
+subtle border
+minimal shadow
+
+Buat form terasa menyatu dengan background.
+
+Jika card digunakan:
+
+border-radius: 18–24px
+
+Jangan gunakan glassmorphism ekstrem.
+
+Jangan gunakan gradient.
+
+---
+
+12. LOGIN MICRO INTERACTION
+
+Input:
+
+Default
+
+Border subtle.
+
+Focus
+
+Gunakan:
+
+Gold / Electric Blue
+
+dengan glow yang sangat halus.
+
+Error
+
+Tampilkan error tepat di bawah field.
+
+Contoh:
+
+Email belum valid.
+
+atau
+
+Password tidak sesuai.
+
+Jangan hanya menggunakan toast.
+
+---
+
+13. BUTTON
+
+Primary button:
+
+background: #0647A5
+color: #F5F1E6
+
+Hover:
+
+#168BFF
+
+Active:
+
+#001F52
+
+Focus:
+
+#FFE29A
+
+Button harus memiliki:
+
+- minimum touch target sekitar 44px
+- loading state
+- disabled state
+- accessible label
+
+Ketika login sedang berlangsung:
+
+Masuk...
+
+dan cegah double submit.
+
+---
+
+14. SETTINGS UI
+
+Gunakan screenshot referensi sebagai inspirasi untuk halaman Pengaturan.
+
+Buat settings berbentuk section.
+
+Contoh:
+
+Pengaturan
+
+TAMPILAN
+
+Tema Aplikasi
+Gelap
+
+Mode Baca Qur'an
+Selalu Tanya
+
+
+ARABIC
+
+Jenis Penulisan Arabic
+IndoPak (Asia)
+
+Tajwid Berwarna
+ON/OFF
+
+Ukuran Font Arabic
+18 px
+
+
+LATIN (TRANSLITERASI)
+
+Aktifkan Latin
+ON/OFF
+
+Ukuran Font Latin
+16 px
+
+
+TERJEMAHAN
+
+Aktifkan Terjemahan
+ON/OFF
+
+Penerjemah
+...
+
+Ukuran Font Terjemahan
+16 px
+
+
+AUDIO MURATTAL
+
+Qori Murattal
+...
+
+Audio Manager
+...
+
+
+LAINNYA
+
+Aksi Popup Ayat
+...
+
+Biarkan Layar Menyala
+ON/OFF
+
+Layar Penuh
+ON/OFF
+
+
+TENTANG ZQURAN
+
+Informasi & Privasi
+Beri Rating
+Kontak Kami
+
+Tetap gunakan fitur yang memang tersedia pada aplikasi.
+
+Jangan membuat setting palsu.
+
+---
+
+15. SETTINGS INTERACTION
+
+Setiap setting harus benar-benar terhubung ke state aplikasi.
+
+Contoh:
+
+Ukuran Font Arabic
+
+harus langsung mempengaruhi reader.
+
+Aktifkan Terjemahan
+
+harus benar-benar show/hide translation.
+
+Aktifkan Latin
+
+harus benar-benar show/hide transliteration.
+
+Biarkan Layar Menyala
+
+gunakan Screen Wake Lock API jika browser mendukung.
+
+Jika tidak didukung:
+
+fallback gracefully
+
+---
+
+16. SURAH LIST REDESIGN
+
+Gunakan struktur list seperti screenshot.
+
+Setiap surat:
+
+┌────────────────────────────────────────────┐
+│ [01]  Al-Fatihah                  العربية │
+│       MEKAH | 7 AYAT                  ↓  │
+└────────────────────────────────────────────┘
+
+Nomor surat menggunakan decorative Islamic-inspired frame sederhana.
+
+Tetapi:
+
+- jangan meniru artwork secara identik
+- jangan menggunakan ornament berlebihan
+
+Gunakan:
+
+Gold
+Champagne Gold
+Midnight Blue
+
+untuk nomor dan separator.
+
+---
+
+17. JUZ LIST
+
+Buat list:
+
+Juz 1
+Mulai di: Al-Fatihah Ayat 1
+
+Juz 2
+Mulai di: Al-Baqarah Ayat 142
+
+Juz 3
+Mulai di: Al-Baqarah Ayat 253
+
+Data harus berasal dari sumber data aplikasi/API.
+
+Jangan hard-code data jika sudah tersedia dari API atau dataset aplikasi.
+
+---
+
+18. BOOKMARK PAGE
+
+Gunakan layout seperti:
+
+Bookmark
+
+Terakhir Baca
+
+QS. Al-Fatihah 1: Ayat 1
+Juz 1
+
+Jika belum ada:
+
+Belum ada bookmark.
+
+Tambahkan:
+
+- bookmark list
+- last reading
+- note indicator
+- timestamp jika tersedia
+- delete
+- open ayat
+
+---
+
+19. POPUP MENU
+
+Untuk tombol tiga titik pada header, buat popup menu compact seperti screenshot.
+
+Contoh:
+
+┌───────────────────────────┐
+│ ⚙ Pengaturan              │
+│                           │
+│ ↗ Terakhir Baca           │
+│                           │
+│ ★ Beri Rating             │
+│                           │
+│ ⓘ Info Aplikasi           │
+└───────────────────────────┘
+
+Popup:
+
+- aligned ke kanan
+- tidak keluar viewport
+- memiliki shadow halus
+- border subtle
+- background Midnight/Navy
+- text Pearl White
+- accent Gold
+
+Gunakan menu yang accessible.
+
+---
+
+20. ICON SYSTEM
+
+Gunakan satu icon library yang konsisten dengan aplikasi yang sudah ada.
+
+Jangan mencampurkan banyak gaya icon.
+
+Style:
+
+simple
+clean
+outlined
+minimal
+
+Icon aktif:
+
+Gold / Electric Blue
+
+Icon normal:
+
+Pearl White
+
+Icon disabled:
+
+reduced opacity
+
+---
+
+21. BOTTOM NAVIGATION
+
+Untuk mobile, gunakan bottom navigation yang clean.
+
+Contoh:
+
+┌─────────────────────────────────────────┐
+│ Beranda  Qur'an   Cari   Bookmark  Lagi │
+└─────────────────────────────────────────┘
+
+Active:
+
+Gold
+
+Inactive:
+
+Pearl White dengan opacity
+
+Gunakan safe-area:
+
+padding-bottom: env(safe-area-inset-bottom);
+
+Pastikan konten tidak tertutup navigation.
+
+---
+
+22. DESKTOP RESPONSIVE
+
+Jangan sekadar memperbesar mobile UI.
+
+Desktop:
+
+- gunakan max-width container
+- sidebar jika sesuai
+- header lebih luas
+- reader memiliki reading width optimal
+- settings menggunakan layout yang lebih lega
+
+Tetap mempertahankan identitas visual mobile.
+
+---
+
+23. SCROLL EXPERIENCE
+
+Pastikan halaman:
+
+- smooth
+- tidak jumping
+- tidak menyebabkan layout shift
+- posisi scroll tetap ketika kembali
+- header tidak berkedip
+- sticky tab tidak menutupi judul ayat
+
+Gunakan:
+
+scroll-padding-top
+
+untuk navigasi internal.
+
+---
+
+24. READER HEADER
+
+Pada halaman membaca surat, header harus dapat berubah berdasarkan scroll.
+
+Saat awal:
+
+← Logo ZQuran
+  Al-Fatihah
+  Search / Audio / More
+
+Saat user scroll:
+
+Al-Fatihah
+
+dapat berubah menjadi compact header.
+
+Pastikan ayat tetap menjadi fokus utama.
+
+---
+
+25. DO NOT BREAK EXISTING FUNCTIONALITY
+
+Sebelum mengubah UI:
+
+1. Identifikasi component existing.
+2. Identifikasi state existing.
+3. Identifikasi routing.
+4. Identifikasi API service.
+5. Identifikasi authentication.
+6. Identifikasi persistence.
+7. Identifikasi audio player.
+8. Identifikasi PWA.
+
+Kemudian lakukan redesign di layer UI/UX terlebih dahulu.
+
+Jangan menghapus logic yang sudah bekerja.
+
+---
+
+26. COMPONENT ARCHITECTURE
+
+Jika diperlukan, buat component reusable:
+
+components/
+├── AppHeader
+├── ScrollAwareHeader
+├── QuranHeader
+├── TabNavigation
+├── LoginForm
+├── AuthButton
+├── SettingSection
+├── SettingItem
+├── ToggleSetting
+├── QuranListItem
+├── JuzListItem
+├── BookmarkItem
+├── PopupMenu
+├── BottomNavigation
+└── IconButton
+
+Hindari duplikasi UI.
+
+---
+
+27. SCROLL-AWARE HEADER IMPLEMENTATION
+
+Gunakan hook reusable:
+
+useScrollDirection()
+
+atau mekanisme setara.
+
+Logika:
+
+scrollTop <= threshold
+→ header visible
+
+scrolling down
+→ header compact/hidden
+
+scrolling up
+→ header visible
+
+Tambahkan threshold agar header tidak berkedip ketika user melakukan scroll kecil.
+
+Contoh konsep:
+
+const delta = currentScrollY - previousScrollY;
+
+if (Math.abs(delta) < threshold) {
+  return;
+}
+
+if (delta > 0 && currentScrollY > collapseThreshold) {
+  hideHeader();
+}
+
+if (delta < 0) {
+  showHeader();
+}
+
+Sesuaikan implementasi dengan architecture aplikasi yang sudah ada.
+
+---
+
+28. ACCESSIBILITY
+
+Semua:
+
+- button
+- icon button
+- tab
+- input
+- toggle
+- popup menu
+
+harus accessible.
+
+Gunakan:
+
+aria-label
+aria-expanded
+aria-selected
+role="tab"
+role="menu"
+
+jika memang sesuai kebutuhan.
+
+Pastikan keyboard navigation tetap berfungsi.
+
+---
+
+29. PERFORMANCE
+
+Scroll handler harus performant.
+
+Gunakan:
+
+requestAnimationFrame
+
+atau passive event listener bila sesuai.
+
+Jangan melakukan heavy React state update pada setiap pixel scroll.
+
+Hindari:
+
+setState pada setiap scroll event
+
+tanpa throttling.
+
+---
+
+30. RESPONSIVE QA
+
+Setelah redesign, uji:
+
+320 × 640
+360 × 800
+375 × 812
+390 × 844
+414 × 896
+480 × 960
+768 × 1024
+1024 × 1366
+1280 × 800
+1440 × 900
+
+Pastikan:
+
+- header tidak overflow
+- login form tidak terpotong
+- keyboard mobile tidak merusak layout
+- popup menu tidak keluar layar
+- bottom navigation tidak menutup content
+- tab tidak terpotong
+- Arabic text tidak overflow
+- tombol tetap mudah disentuh
+
+---
+
+31. VISUAL ACCEPTANCE CRITERIA
+
+Hasil akhir harus memiliki karakter visual:
+
+Header
+
+Compact
+Clean
+Dark
+Native-mobile feeling
+Scroll-aware
+
+Login
+
+Premium
+Minimal
+Focused
+Trustworthy
+Tidak terlalu ramai
+
+Settings
+
+Section based
+Readable
+Dense tetapi nyaman
+Clear hierarchy
+
+Quran List
+
+Elegant
+Compact
+Easy scanning
+Gold accent
+
+Popup
+
+Small
+Clean
+Accessible
+Native-like
+
+---
+
+32. JANGAN LAKUKAN
+
+Jangan:
+
+- mengganti logo ZQuran
+- mengganti nama ZQuran
+- mengganti palette ZQuran
+- menggunakan gradient
+- menyalin logo dari screenshot
+- menyalin identitas visual aplikasi referensi
+- membuat UI terlalu ramai
+- menggunakan animasi berlebihan
+- membuat header fixed yang selalu mengambil banyak ruang
+- membuat popup keluar layar
+- membuat tombol dummy
+- menghapus fitur existing
+- mengubah API
+- mengubah data Al-Qur'an
+- mengubah authentication logic tanpa alasan
+- menghilangkan PWA
+- menghilangkan bookmark
+- menghilangkan audio
+- menghilangkan tafsir
+
+---
+
+33. IMPLEMENTATION WORKFLOW
+
+Lakukan dalam urutan:
+
+STEP 1
+
+Audit UI existing.
+
+STEP 2
+
+Identifikasi component yang perlu diubah.
+
+STEP 3
+
+Implementasikan design tokens.
+
+STEP 4
+
+Redesign Login UI.
+
+STEP 5
+
+Implementasikan Scroll-Aware Header.
+
+STEP 6
+
+Redesign Quran tabs.
+
+STEP 7
+
+Redesign Surah/Juz/Bookmark list.
+
+STEP 8
+
+Redesign Settings.
+
+STEP 9
+
+Redesign Popup Menu.
+
+STEP 10
+
+Pastikan Bottom Navigation tidak menutupi konten.
+
+STEP 11
+
+Uji responsive.
+
+STEP 12
+
+Uji semua existing functionality.
+
+STEP 13
+
+Build aplikasi.
+
+STEP 14
+
+Periksa console dan runtime error.
+
+STEP 15
+
+Perbaiki semua error yang ditemukan.
+
+---
+
+34. FINAL INSTRUCTION
+
+Implementasikan redesign ini langsung pada aplikasi ZQuran yang sudah ada.
+
+Jangan hanya membuat mockup.
+
+Jangan hanya membuat screenshot.
+
+Jangan membuat prototype terpisah.
+
+Perubahan harus masuk ke component React yang benar-benar digunakan aplikasi.
+
+Pertahankan:
+
+ZQuran
+Logo ZQuran
+Navy #03152F
+Royal Blue #0647A5
+Electric Blue #168BFF
+Midnight Blue #001F52
+Metallic Gold #D9A441
+Champagne Gold #FFE29A
+Pearl White #F5F1E6
+
+Gunakan screenshot yang dilampirkan sebagai visual reference untuk layout dan interaction pattern.
+
+Prioritas:
+
+Existing functionality
+        ↓
+UI consistency
+        ↓
+Scroll behavior
+        ↓
+Responsive layout
+        ↓
+Accessibility
+        ↓
+Performance
+        ↓
+Visual polish
+
+Setelah implementasi selesai, tampilkan ringkasan:
+
+UI REDESIGN STATUS
+
+Login UI          PASS / FAIL
+Scroll Header     PASS / FAIL
+Quran Tabs        PASS / FAIL
+Surah List        PASS / FAIL
+Juz List          PASS / FAIL
+Bookmark UI       PASS / FAIL
+Settings UI       PASS / FAIL
+Popup Menu        PASS / FAIL
+Responsive        PASS / FAIL
+Existing Features PASS / FAIL
+Build             PASS / FAIL
+Runtime Errors    NONE / FOUND
+
+Branding ZQuran   UNCHANGED
+Logo              UNCHANGED
+Color Palette     UNCHANGED
+
+Jangan menyatakan PASS hanya karena komponen berhasil dirender. Lakukan pengujian interaksi yang nyata.
+35. ATURAN FALLBACK FITUR YANG BELUM TERSEDIA
+
+Implementasikan sistem fallback yang aman, jujur, dan graceful untuk setiap fitur yang belum didukung browser, API, perangkat, atau konfigurasi aplikasi.
+
+PRINSIP UTAMA
+
+Gunakan prinsip:
+
+FEATURE DETECTION
+→ PRIMARY IMPLEMENTATION
+→ GRACEFUL FALLBACK
+→ USER FEEDBACK
+→ NO FAKE SUCCESS
+
+Jangan pernah:
+
+- menampilkan fitur sebagai aktif jika sebenarnya gagal
+- membuat tombol yang tidak melakukan apa-apa
+- menampilkan data dummy sebagai data asli
+- mengarang endpoint
+- mengarang URL audio
+- mengarang teks Al-Qur'an
+- mengarang terjemahan
+- mengarang tafsir
+- menganggap browser mendukung API hanya karena UI tersedia
+- mengklaim offline jika data belum tersedia offline
+- mengklaim instalasi PWA berhasil jika browser menolaknya
+
+---
+
+36. KATEGORI STATUS FITUR
+
+Setiap fitur dapat memiliki status:
+
+const FEATURE_STATUS = {
+  AVAILABLE: "available",
+  LOADING: "loading",
+  UNSUPPORTED: "unsupported",
+  UNAVAILABLE: "unavailable",
+  OFFLINE: "offline",
+  ERROR: "error",
+  REQUIRES_CONFIG: "requires-config"
+};
+
+Gunakan status tersebut secara internal agar UI dapat memberikan respons yang tepat.
+
+---
+
+37. FALLBACK API
+
+Jika API utama:
+
+https://equran.id/api/v2
+
+tidak dapat diakses:
+
+Kondisi
+
+- timeout
+- HTTP error
+- network error
+- response JSON tidak valid
+- struktur response berubah
+- server unavailable
+
+Perilaku
+
+1. Tampilkan loading state.
+2. Terapkan timeout.
+3. Retry terbatas.
+4. Jika gagal, gunakan cache yang sebelumnya valid.
+5. Jika cache tidak tersedia, tampilkan empty/error state.
+6. Berikan tombol "Coba lagi".
+
+Contoh:
+
+Tidak dapat memuat data Al-Qur'an.
+
+Periksa koneksi internet Anda lalu coba lagi.
+
+[ Coba Lagi ]
+
+Jika data berasal dari cache:
+
+Koneksi tidak tersedia.
+Menampilkan data yang terakhir tersimpan.
+
+Jangan menyebut data sebagai realtime jika sebenarnya berasal dari cache.
+
+---
+
+38. FALLBACK DATA AL-QUR'AN
+
+Data Al-Qur'an adalah data kritis.
+
+Jika data surat/ayat tidak tersedia:
+
+JANGAN
+menggunakan teks placeholder
+
+Jangan menampilkan:
+
+Lorem ipsum
+Ayat contoh
+Terjemahan contoh
+
+Lebih baik:
+
+Data ayat belum dapat dimuat.
+Silakan coba lagi ketika koneksi tersedia.
+
+Untuk data yang sudah pernah berhasil dimuat dan tersimpan secara lokal, gunakan cache tersebut.
+
+---
+
+39. FALLBACK SEARCH
+
+Jika pencarian global belum dapat membangun indeks seluruh Al-Qur'an:
+
+Jika sebagian dataset tersedia
+
+Izinkan pencarian pada dataset yang sudah tersedia dan tampilkan:
+
+Menampilkan hasil dari data yang telah dimuat.
+
+Jika indeks belum tersedia
+
+Jangan menampilkan hasil palsu.
+
+Tampilkan:
+
+Indeks pencarian sedang disiapkan.
+
+dengan progress jika memungkinkan.
+
+Jika offline
+
+Cari hanya pada data yang tersedia di cache.
+
+Label:
+
+Pencarian offline
+
+Jika tidak ada data lokal:
+
+Pencarian membutuhkan data yang belum tersedia offline.
+
+---
+
+40. FALLBACK AUDIO
+
+Audio harus diverifikasi sebelum dianggap tersedia.
+
+Jika URL audio tidak tersedia dari API:
+
+Jangan membuat URL audio sendiri.
+
+Jika qari tertentu tidak tersedia:
+
+Qari ini belum tersedia.
+
+Tawarkan qari lain hanya jika benar-benar tersedia dari API.
+
+Jika browser gagal memainkan audio:
+
+Audio tidak dapat diputar pada perangkat/browser ini.
+
+Berikan:
+
+[Coba Lagi]
+
+Jika autoplay diblokir browser:
+
+Pemutaran otomatis dibatasi browser.
+Tekan tombol play untuk memulai audio.
+
+Jangan menganggap autoplay sebagai error fatal.
+
+---
+
+41. FALLBACK AUDIO BACKGROUND / MINI PLAYER
+
+Jika background audio tidak didukung:
+
+- tetap gunakan audio player biasa
+- jangan menghilangkan kontrol utama
+- jangan mengklaim audio tetap berjalan di background
+
+Jika Media Session API tersedia:
+
+gunakan Media Session API
+
+Jika tidak tersedia:
+
+gunakan HTMLAudioElement biasa
+
+UI tetap harus memberikan status pemutaran yang benar.
+
+---
+
+42. FALLBACK TAFSIR
+
+Jika tafsir tersedia:
+
+tampilkan tafsir dari API
+
+Jika endpoint/data tafsir tidak tersedia:
+
+Tafsir untuk ayat ini belum tersedia.
+
+Jangan:
+
+- membuat tafsir sendiri
+- menggunakan teks AI sebagai tafsir Qur'an
+- menggunakan sumber yang tidak dikonfigurasi
+- menampilkan teks placeholder seolah-olah tafsir asli
+
+---
+
+43. FALLBACK TRANSLITERASI
+
+Jika transliterasi tersedia dari sumber data:
+
+tampilkan transliterasi
+
+Jika tidak tersedia:
+
+Sembunyikan opsi transliterasi
+
+atau tampilkan disabled state:
+
+Transliterasi tidak tersedia untuk data ini.
+
+Jangan membuat transliterasi secara otomatis lalu menyatakannya sebagai data resmi API jika sumber tersebut tidak menyediakan transliterasi.
+
+---
+
+44. FALLBACK TERJEMAHAN
+
+Jika terjemahan tersedia:
+
+tampilkan terjemahan
+
+Jika tidak tersedia:
+
+Terjemahan belum tersedia.
+
+Jangan membuat terjemahan sendiri sebagai pengganti data resmi.
+
+Jika user menonaktifkan terjemahan:
+
+jangan melakukan request terjemahan yang tidak diperlukan
+
+untuk menghemat bandwidth dan performa.
+
+---
+
+45. FALLBACK BOOKMARK
+
+Prioritas penyimpanan:
+
+IndexedDB / persistent browser storage
+        ↓
+localStorage sebagai fallback
+        ↓
+session state hanya sebagai fallback terakhir
+
+Jika IndexedDB gagal:
+
+gunakan localStorage
+
+Jika seluruh persistent storage gagal:
+
+Bookmark hanya tersedia selama sesi ini.
+
+Tampilkan peringatan ringan:
+
+Penyimpanan perangkat tidak tersedia.
+Perubahan bookmark mungkin tidak bertahan setelah aplikasi ditutup.
+
+Jangan menghapus bookmark secara diam-diam.
+
+---
+
+46. FALLBACK READING HISTORY
+
+Jika persistent storage tersedia:
+
+simpan posisi terakhir
+
+Jika tidak:
+
+simpan selama sesi aktif
+
+Saat aplikasi dibuka kembali dan posisi tidak dapat dipulihkan:
+
+Tidak dapat memulihkan posisi terakhir membaca.
+
+Berikan akses manual ke daftar surat.
+
+---
+
+47. FALLBACK AUTO-SCROLL
+
+Jika browser mendukung smooth scrolling:
+
+gunakan smooth scrolling
+
+Jika tidak:
+
+gunakan normal scrolling
+
+Jika animasi dikurangi karena:
+
+prefers-reduced-motion
+
+gunakan scrolling yang lebih sederhana dan hindari animasi berlebihan.
+
+Jika auto-scroll gagal:
+
+Auto-scroll tidak dapat dijalankan.
+Anda tetap dapat menggulir secara manual.
+
+Jangan menghentikan reader.
+
+Pastikan timer, animation frame, observer, dan event listener dibersihkan ketika:
+
+component unmount
+route berubah
+surat berubah
+user menekan stop
+
+---
+
+48. FALLBACK SCREEN WAKE LOCK
+
+Jika:
+
+navigator.wakeLock
+
+tersedia:
+
+gunakan Screen Wake Lock API
+
+Jika tidak tersedia:
+
+toggle tetap dapat digunakan tetapi tampilkan:
+
+Fitur menjaga layar tetap menyala tidak didukung browser ini.
+
+Jangan membuat aplikasi crash.
+
+---
+
+49. FALLBACK FULLSCREEN
+
+Jika Fullscreen API tersedia:
+
+aktifkan fullscreen
+
+Jika tidak:
+
+sembunyikan fitur atau tampilkan disabled state
+
+Pesan:
+
+Mode layar penuh tidak didukung pada browser ini.
+
+Jangan menganggap CSS fullscreen sebagai fullscreen browser yang sebenarnya.
+
+---
+
+50. FALLBACK SHARE
+
+Jika:
+
+navigator.share
+
+tersedia:
+
+gunakan Web Share API
+
+Jika tidak tersedia:
+
+fallback ke clipboard
+
+Contoh:
+
+Ayat berhasil disalin.
+Silakan bagikan melalui aplikasi pilihan Anda.
+
+Jika clipboard juga gagal:
+
+Tidak dapat menyalin ayat secara otomatis.
+
+Jangan membuat tombol Share yang terlihat aktif tetapi tidak melakukan apa pun.
+
+---
+
+51. FALLBACK COPY TO CLIPBOARD
+
+Prioritas:
+
+navigator.clipboard.writeText()
+        ↓
+fallback textarea + execCommand jika masih diperlukan
+        ↓
+manual copy instruction
+
+Jika gagal:
+
+Penyalinan otomatis tidak tersedia.
+
+Jangan menampilkan:
+
+Berhasil disalin
+
+sebelum operasi benar-benar berhasil.
+
+---
+
+52. FALLBACK PWA INSTALL
+
+Jangan membuat tombol:
+
+Install App
+
+selalu aktif.
+
+Deteksi:
+
+beforeinstallprompt
+
+jika browser mendukung.
+
+Jika tersedia:
+
+Tampilkan Install ZQuran
+
+Jika tidak:
+
+Jangan mengklaim aplikasi dapat di-install.
+
+Untuk iOS/iPadOS jika instalasi otomatis tidak tersedia:
+
+Tambahkan ke Layar Utama
+
+hanya jika instruksi tersebut relevan dengan environment.
+
+Jangan mengklaim install berhasil sebelum browser memberikan indikasi keberhasilan.
+
+---
+
+53. FALLBACK OFFLINE
+
+Offline mode hanya boleh disebut aktif jika memang tersedia data lokal yang valid.
+
+Status:
+
+ONLINE
+OFFLINE WITH CACHE
+OFFLINE WITHOUT CACHE
+
+Offline dengan cache
+
+Anda sedang offline.
+Menampilkan data yang tersimpan.
+
+Offline tanpa cache
+
+Anda sedang offline.
+Data yang diperlukan belum tersedia di perangkat.
+
+Jangan membuat halaman offline palsu yang terlihat lengkap tetapi datanya kosong atau dummy.
+
+---
+
+54. FALLBACK SERVICE WORKER
+
+Jika Service Worker tidak didukung:
+
+Aplikasi tetap berjalan sebagai web app biasa.
+
+Jangan membuat aplikasi gagal hanya karena PWA tidak tersedia.
+
+Jika registration gagal:
+
+catat error ke console/error monitoring
+
+tetapi:
+
+jangan mengganggu fungsi utama aplikasi
+
+---
+
+55. FALLBACK NOTIFICATION
+
+Jika fitur notifikasi direncanakan tetapi:
+
+Notification API tidak tersedia
+
+jangan tampilkan tombol aktif.
+
+Jika permission ditolak:
+
+Notifikasi tidak diizinkan.
+Anda dapat mengaktifkannya melalui pengaturan browser.
+
+Jangan meminta permission berulang kali.
+
+---
+
+56. FALLBACK AUTHENTICATION
+
+Authentication harus mengikuti provider yang benar-benar terkonfigurasi.
+
+Jika authentication provider tidak tersedia:
+
+Jangan membuat login palsu.
+
+Tampilkan:
+
+Login saat ini belum tersedia.
+Anda tetap dapat menggunakan fitur yang tidak membutuhkan akun.
+
+Jika aplikasi mendukung guest mode:
+
+Lanjutkan tanpa akun
+
+dan gunakan local persistence untuk fitur lokal.
+
+---
+
+57. FALLBACK GOOGLE LOGIN
+
+Jika Google authentication belum dikonfigurasi:
+
+Jangan tampilkan tombol Google Login sebagai tombol aktif.
+
+Jika konfigurasi environment belum tersedia:
+
+Google Login belum dikonfigurasi.
+
+Jangan menaruh:
+
+client ID
+secret
+credential
+API secret
+
+langsung di source code frontend.
+
+---
+
+58. FALLBACK ICON / FONT
+
+Jika font Arab utama gagal dimuat:
+
+gunakan system Arabic fallback font
+
+Contoh fallback stack:
+
+font-family:
+  "Noto Naskh Arabic",
+  "Amiri",
+  "Scheherazade New",
+  serif;
+
+Pastikan teks Arab tetap:
+
+- terbaca
+- memiliki harakat
+- tidak terpotong
+- tidak overflow
+
+Jangan mengganti teks Arab dengan gambar jika tidak diperlukan.
+
+---
+
+59. FALLBACK RESPONSIVE
+
+Jika layout desktop tidak dapat digunakan pada viewport tertentu:
+
+fallback ke mobile layout
+
+Prioritas:
+
+content accessibility
+>
+functionality
+>
+visual perfection
+
+Tidak boleh terjadi:
+
+- horizontal scrolling yang tidak disengaja
+- tombol keluar layar
+- popup terpotong
+- header menutupi ayat
+- bottom navigation menutupi content
+
+---
+
+60. FALLBACK SEARCH NETWORK
+
+Jika pencarian server gagal tetapi data lokal tersedia:
+
+gunakan local search index
+
+Jika local index juga belum tersedia:
+
+tampilkan retry
+
+Jangan mengarang hasil pencarian.
+
+---
+
+61. FALLBACK TIMEOUT
+
+Gunakan timeout untuk request API.
+
+Jika request terlalu lama:
+
+Request membutuhkan waktu terlalu lama.
+
+Tampilkan:
+
+[Coba Lagi]
+
+Jangan membuat user menunggu tanpa batas.
+
+Gunakan AbortController untuk membatalkan request yang sudah tidak relevan.
+
+---
+
+62. FALLBACK RETRY
+
+Gunakan retry terbatas.
+
+Contoh:
+
+attempt 1
+↓
+attempt 2
+↓
+attempt 3
+↓
+show error
+
+Gunakan exponential backoff jika sesuai.
+
+Jangan melakukan infinite retry karena dapat:
+
+- membebani API
+- menguras baterai
+- menghabiskan bandwidth
+- memperlambat aplikasi
+
+---
+
+63. FALLBACK ERROR UI
+
+Gunakan tiga tingkat error:
+
+Informational
+
+Data sedang dimuat.
+
+Recoverable
+
+Data gagal dimuat.
+[Coba Lagi]
+
+Unsupported
+
+Fitur ini tidak didukung pada perangkat/browser Anda.
+
+Jangan menampilkan stack trace kepada user.
+
+Detail teknis hanya untuk:
+
+development console
+error monitoring
+
+---
+
+64. FALLBACK RULE UNTUK FITUR BARU
+
+Setiap fitur baru harus memiliki:
+
+1. Capability detection
+2. Loading state
+3. Success state
+4. Empty state
+5. Error state
+6. Unsupported state
+7. Retry mechanism jika relevan
+
+Sebelum fitur dianggap selesai, jawab:
+
+Apa yang terjadi jika API gagal?
+Apa yang terjadi jika browser tidak mendukung?
+Apa yang terjadi jika permission ditolak?
+Apa yang terjadi jika storage gagal?
+Apa yang terjadi jika user offline?
+Apa yang terjadi jika data kosong?
+
+Jika salah satu belum memiliki jawaban:
+
+fitur belum dianggap production-ready.
+
+---
+
+65. FEATURE AVAILABILITY MATRIX
+
+Buat mekanisme internal yang dapat menghasilkan status:
+
+Fitur| Online| Offline| Unsupported| Fallback
+Quran Data| API| Cache| Error state| Retry/cache
+Search| API/local index| Local index| Empty state| Retry
+Audio| API URL| Cached audio jika tersedia| Normal player| Retry
+Share| Web Share| Clipboard| Copy| Manual
+Clipboard| Clipboard API| Clipboard API| Manual| Text selection
+Fullscreen| Fullscreen API| —| Normal view| Disabled
+Wake Lock| Wake Lock API| —| Normal behavior| Disabled
+Bookmark| IndexedDB| Local cache| Session| Warning
+PWA| Service Worker| Cache| Web mode| Continue
+Install| Browser prompt| —| Browser instructions| Hide
+Authentication| Provider| Session/local| Guest| Continue
+Tafsir| API| Cache| Empty state| Retry
+
+Jangan menggunakan tabel ini sebagai klaim bahwa semua fitur tersebut sudah tersedia.
+
+Tabel merupakan aturan perilaku fallback.
+
+---
+
+66. UI RULE: HIDE VS DISABLE
+
+Gunakan aturan:
+
+Hide
+
+Gunakan jika fitur:
+
+sama sekali tidak relevan
+
+atau browser tidak mendukung dan tidak ada fallback yang berguna.
+
+Disable + explanation
+
+Gunakan jika:
+
+fitur penting
+tetapi sementara tidak tersedia
+
+Contoh:
+
+Audio
+Tidak tersedia untuk ayat ini
+
+Show fallback
+
+Gunakan jika:
+
+ada alternatif yang valid
+
+Contoh:
+
+Share
+→ Clipboard
+
+---
+
+67. NO FAKE DATA RULE
+
+Ini aturan absolut.
+
+Jika data tidak tersedia:
+
+null
+
+atau
+
+empty state
+
+lebih baik daripada data palsu.
+
+Jangan pernah membuat:
+
+- ayat palsu
+- terjemahan palsu
+- tafsir palsu
+- audio URL palsu
+- nama qari palsu
+- hasil pencarian palsu
+- bookmark palsu
+- status login palsu
+
+---
+
+68. USER FEEDBACK
+
+Pesan fallback harus:
+
+- singkat
+- jelas
+- tidak teknis
+- tidak menyalahkan user
+- memberi tindakan berikutnya jika memungkinkan
+
+Hindari:
+
+Error 500
+TypeError
+Failed to fetch
+undefined
+
+Untuk user.
+
+Gunakan:
+
+Tidak dapat memuat data.
+[Coba Lagi]
+
+Detail teknis tetap tersedia di development console.
+
+---
+
+69. FINAL FALLBACK ACCEPTANCE TEST
+
+Sebelum menyatakan aplikasi selesai, uji minimal:
+
+[ ] API offline
+[ ] API timeout
+[ ] API invalid response
+[ ] Retry
+[ ] Cache
+[ ] Browser tanpa Web Share
+[ ] Browser tanpa Clipboard API
+[ ] Browser tanpa Fullscreen API
+[ ] Browser tanpa Wake Lock
+[ ] Browser tanpa Service Worker
+[ ] Storage failure
+[ ] Audio gagal
+[ ] Autoplay ditolak
+[ ] Authentication belum dikonfigurasi
+[ ] PWA install tidak tersedia
+[ ] Font Arab gagal dimuat
+[ ] Search index belum selesai
+[ ] Search tanpa hasil
+[ ] Tafsir tidak tersedia
+[ ] Transliterasi tidak tersedia
+[ ] Responsive 320px
+[ ] Reduced motion
+
+Tidak boleh ada crash akibat fitur yang tidak tersedia.
+
+---
+
+70. ATURAN AKHIR
+
+Gunakan prinsip:
+
+«Degrade gracefully, never fabricate functionality.»
+
+Jika fitur utama tersedia:
+
+gunakan fitur utama
+
+Jika gagal tetapi ada fallback:
+
+gunakan fallback
+
+Jika tidak ada fallback:
+
+jelaskan bahwa fitur tidak tersedia
+
+Jika data tidak ada:
+
+jangan mengarang data
+
+Jika browser tidak mendukung:
+
+jangan membuat aplikasi crash
+
+Jika konfigurasi eksternal belum tersedia:
+
+jangan membuat fitur palsu
+
+Aplikasi harus selalu berada dalam kondisi:
+
+FUNCTIONAL
+HONEST
+RECOVERABLE
+ACCESSIBLE
+SAFE
+
+dan bukan sekadar terlihat lengkap secara visual.
