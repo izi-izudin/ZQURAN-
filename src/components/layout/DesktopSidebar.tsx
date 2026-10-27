@@ -1,47 +1,62 @@
 import React from 'react';
-import { Home, BookOpen, Search, Bookmark, Settings, BookMarked, Compass } from 'lucide-react';
+import { Home, BookOpen, Clock, Compass, MoreHorizontal, Search, Bookmark, Settings } from 'lucide-react';
 import { BRANDING } from '../../config/appConfig';
 
 interface DesktopSidebarProps {
   currentTab: string;
+  quranSubTab?: string;
   onNavigate: (tab: string) => void;
 }
 
-export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentTab, onNavigate }) => {
+export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
+  currentTab,
+  quranSubTab,
+  onNavigate,
+}) => {
   const mainNavItems = [
     { id: 'home', label: 'Beranda', icon: Home },
-    { id: 'quran', label: "Daftar 114 Surat", icon: BookOpen },
+    { id: 'quran', label: "Al-Qur'an (114 Surat)", icon: BookOpen },
+    { id: 'schedule', label: 'Jadwal Sholat & Alarm', icon: Clock },
+    { id: 'qibla', label: 'Arah Kiblat & Peta', icon: Compass },
     { id: 'search', label: 'Pencarian Global', icon: Search },
     { id: 'bookmarks', label: 'Bookmark & Catatan', icon: Bookmark },
-    { id: 'settings', label: 'Pengaturan Tilawah', icon: Settings },
+    { id: 'more', label: 'Lainnya', icon: MoreHorizontal },
+    { id: 'settings', label: 'Pengaturan', icon: Settings },
   ];
 
   return (
     <aside
       aria-label="Navigasi Desktop ZQuran"
-      className="hidden md:flex flex-col w-64 shrink-0 bg-[#03152F] border-r border-[#0D3169] min-h-[calc(100vh-4rem)] p-4"
+      className="hidden md:flex flex-col w-64 shrink-0 bg-[#03152F] light:bg-[#FDFBF7] border-r border-[#0D3169] light:border-[#E5DFD5] min-h-[calc(100vh-4rem)] p-4 transition-colors"
     >
       {/* Brand Badge */}
-      <div className="p-3.5 rounded-2xl bg-[#051D42]/70 border border-[#0D3169] mb-6 flex items-center gap-3">
+      <div className="p-3.5 rounded-2xl bg-[#051D42]/70 light:bg-white border border-[#0D3169] light:border-[#E5DFD5] mb-5 flex items-center gap-3 shadow-xs">
         <img
           src={BRANDING.logoUrl}
           alt={BRANDING.name}
           className="w-10 h-10 rounded-xl object-contain border border-[#D9A441]/40 shadow-sm"
         />
         <div className="overflow-hidden">
-          <h2 className="text-sm font-bold text-[#F5F1E6] truncate">{BRANDING.name}</h2>
-          <p className="text-[11px] text-[#FFE29A] font-medium truncate">Membaca & Tadabbur</p>
+          <h2 className="text-sm font-bold text-[#F5F1E6] light:text-[#1A202C] truncate">{BRANDING.name}</h2>
+          <p className="text-[11px] text-[#FFE29A] light:text-[#2E6F52] font-medium truncate">Membaca & Tadabbur</p>
         </div>
       </div>
 
       {/* Nav List */}
       <nav className="space-y-1.5 flex-1">
-        <p className="text-[10px] font-semibold text-[#8CA3C7] uppercase tracking-wider px-3 mb-2">
+        <p className="text-[10px] font-semibold text-[#8CA3C7] light:text-[#64748B] uppercase tracking-wider px-3 mb-2">
           Menu Utama
         </p>
         {mainNavItems.map((item) => {
           const Icon = item.icon;
-          const isActive = currentTab === item.id || (item.id === 'quran' && currentTab === 'reader');
+          const isQuran = item.id === 'quran';
+          const isMore = item.id === 'more';
+
+          const isActive = isQuran
+            ? currentTab === 'quran' || currentTab === 'reader'
+            : isMore
+            ? currentTab === 'more'
+            : currentTab === item.id;
 
           return (
             <button
@@ -49,14 +64,14 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentTab, onNa
               onClick={() => onNavigate(item.id)}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition cursor-pointer ${
                 isActive
-                  ? 'bg-[#0647A5] text-[#F5F1E6] shadow-sm font-semibold'
-                  : 'text-[#8CA3C7] hover:text-[#F5F1E6] hover:bg-[#051D42]'
+                  ? 'bg-[#0647A5] light:bg-[#2E6F52] text-white shadow-sm font-semibold'
+                  : 'text-[#8CA3C7] light:text-[#64748B] hover:text-[#F5F1E6] light:hover:text-[#1A202C] hover:bg-[#051D42] light:hover:bg-[#E8F0EC]'
               }`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-[#FFE29A]' : 'text-[#8CA3C7]'}`} />
+              <Icon className={`w-4 h-4 ${isActive ? 'text-[#FFE29A] light:text-white' : 'text-[#8CA3C7] light:text-[#64748B]'}`} />
               <span>{item.label}</span>
               {isActive && (
-                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FFE29A]" />
+                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FFE29A] light:bg-white" />
               )}
             </button>
           );
@@ -64,9 +79,9 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentTab, onNa
       </nav>
 
       {/* Bottom Info */}
-      <div className="pt-4 border-t border-[#0D3169]/60 text-[11px] text-[#8CA3C7] px-3 space-y-1">
-        <p className="text-[#FFE29A] font-medium">Kemenag RI Certified Data</p>
-        <p className="text-[10px]">Audio Murottal 6 Qari Resmi</p>
+      <div className="pt-4 border-t border-[#0D3169]/60 light:border-[#E5DFD5] text-[11px] text-[#8CA3C7] light:text-[#64748B] px-3 space-y-1">
+        <p className="text-[#FFE29A] light:text-[#2E6F52] font-medium">Kemenag RI Certified Data</p>
+        <p className="text-[10px]">PWA Ready & Audio Murottal 6 Qari</p>
       </div>
     </aside>
   );

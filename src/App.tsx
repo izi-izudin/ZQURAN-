@@ -24,12 +24,27 @@ import { SearchPage } from './pages/SearchPage';
 import { BookmarkPage } from './pages/BookmarkPage';
 import { TafsirPage } from './pages/TafsirPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { SchedulePage } from './pages/SchedulePage';
+import { QiblaPage } from './pages/QiblaPage';
+import { MorePage } from './pages/MorePage';
 
 import { LoginModal } from './components/auth/LoginModal';
 import { RatingModal } from './components/modals/RatingModal';
 import { InfoModal } from './components/modals/InfoModal';
+import { StoryboardModal } from './components/home/StoryboardModal';
+import { PrayerScheduleModal } from './components/modals/IslamicFeaturesModals';
 
-export type AppTab = 'home' | 'quran' | 'reader' | 'search' | 'bookmarks' | 'tafsir' | 'settings';
+export type AppTab =
+  | 'home'
+  | 'quran'
+  | 'schedule'
+  | 'qibla'
+  | 'more'
+  | 'reader'
+  | 'search'
+  | 'bookmarks'
+  | 'tafsir'
+  | 'settings';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<AppTab>('home');
@@ -51,6 +66,8 @@ export default function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showStoryboardModal, setShowStoryboardModal] = useState(false);
+  const [showPrayerModal, setShowPrayerModal] = useState(false);
 
   // 114 Surahs state
   const [surahs, setSurahs] = useState<SurahSummary[]>([]);
@@ -106,6 +123,16 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+    if (targetTab === 'quran') {
+      setCurrentTab('quran');
+      if (meta && typeof meta === 'string' && (meta === 'surah' || meta === 'juz' || meta === 'bookmark')) {
+        setQuranSubTab(meta as QuranTab);
+      } else {
+        setQuranSubTab('surah');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     setCurrentTab(targetTab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -141,6 +168,9 @@ export default function App() {
       return `QS. ${activeSurahMeta.namaLatin}`;
     }
     if (currentTab === 'quran') return "Baca Qur'an";
+    if (currentTab === 'schedule') return 'Jadwal Sholat & Alarm';
+    if (currentTab === 'qibla') return 'Arah Kiblat Presisi';
+    if (currentTab === 'more') return 'Lainnya & Modul Ibadah';
     if (currentTab === 'search') return 'Pencarian Global';
     if (currentTab === 'bookmarks') return 'Bookmark & Catatan';
     if (currentTab === 'tafsir') return 'Tafsir Kemenag RI';
@@ -155,13 +185,22 @@ export default function App() {
     if (currentTab === 'quran') {
       return '114 Surat • 30 Juz • Catatan Tadabbur';
     }
+    if (currentTab === 'schedule') {
+      return 'Baros, Banten • Waktu Indonesia Barat (WIB)';
+    }
+    if (currentTab === 'qibla') {
+      return '294.8° NW • Jarak ke Ka\'bah 8.347 km';
+    }
+    if (currentTab === 'more') {
+      return 'Tafsir, Bookmark, Kalender Hijriah & Pengaturan';
+    }
     return undefined;
   };
 
   return (
     <SettingsProvider>
       <AudioProvider>
-        <div className="min-h-screen bg-[#03152F] text-[#F5F1E6] flex flex-col antialiased selection:bg-[#0647A5] selection:text-[#FFE29A]">
+        <div className="min-h-screen bg-[#03152F] light:bg-[#FDFBF7] text-[#F5F1E6] light:text-[#1A202C] flex flex-col antialiased selection:bg-[#0647A5] selection:text-[#FFE29A]">
           {/* Offline Indicator Toast */}
           <OfflineIndicator />
 
@@ -181,6 +220,8 @@ export default function App() {
             activeTab={quranSubTab}
             onTabChange={(tab) => setQuranSubTab(tab)}
             onOpenSearch={() => setCurrentTab('search')}
+            onOpenBell={() => setShowPrayerModal(true)}
+            onOpenStoryboard={() => setShowStoryboardModal(true)}
             onOpenSettings={() => setCurrentTab('settings')}
             onOpenLastRead={handleOpenLastRead}
             onOpenRating={() => setShowRatingModal(true)}
@@ -194,12 +235,13 @@ export default function App() {
           <div className="flex-1 flex max-w-7xl w-full mx-auto">
             {/* Desktop Left Sidebar */}
             <DesktopSidebar
-              currentTab={currentTab === 'quran' ? 'quran' : currentTab}
+              currentTab={currentTab}
+              quranSubTab={quranSubTab}
               onNavigate={handleNavigate}
             />
 
-            {/* Main Content Area with scroll padding */}
-            <main className="flex-1 min-w-0 px-3.5 sm:px-6 py-5 overflow-x-hidden scroll-pt-20">
+            {/* Main Content Area with scroll padding & mobile bottom clearance */}
+            <main className="flex-1 min-w-0 px-3.5 sm:px-6 py-5 pb-36 md:pb-20 overflow-x-hidden scroll-pt-20">
               {currentTab === 'home' && (
                 <HomePage onNavigate={handleNavigate} surahs={surahs} />
               )}
@@ -213,6 +255,22 @@ export default function App() {
                   onSelectSurah={handleOpenSurah}
                   activeTab={quranSubTab}
                   onTabChange={setQuranSubTab}
+                />
+              )}
+
+              {currentTab === 'schedule' && (
+                <SchedulePage onOpenQibla={() => handleNavigate('qibla')} />
+              )}
+
+              {currentTab === 'qibla' && (
+                <QiblaPage onBack={() => handleNavigate('home')} />
+              )}
+
+              {currentTab === 'more' && (
+                <MorePage
+                  onNavigate={handleNavigate}
+                  onOpenInfo={() => setShowInfoModal(true)}
+                  onOpenRating={() => setShowRatingModal(true)}
                 />
               )}
 
@@ -255,7 +313,11 @@ export default function App() {
           <GlobalAudioPlayer />
 
           {/* Mobile Clean Bottom Navigation */}
-          <BottomNav currentTab={currentTab} onNavigate={handleNavigate} />
+          <BottomNav
+            currentTab={currentTab}
+            quranSubTab={quranSubTab}
+            onNavigate={handleNavigate}
+          />
 
           {/* Modals */}
           <LoginModal
@@ -270,6 +332,15 @@ export default function App() {
           <InfoModal
             isOpen={showInfoModal}
             onClose={() => setShowInfoModal(false)}
+          />
+          <StoryboardModal
+            isOpen={showStoryboardModal}
+            onClose={() => setShowStoryboardModal(false)}
+            onNavigate={handleNavigate}
+          />
+          <PrayerScheduleModal
+            isOpen={showPrayerModal}
+            onClose={() => setShowPrayerModal(false)}
           />
         </div>
       </AudioProvider>

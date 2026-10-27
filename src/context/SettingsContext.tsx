@@ -7,6 +7,7 @@ interface SettingsContextValue {
   updateSettings: (partial: Partial<UserSettings>) => void;
   markSurahCompleted: (surahId: number) => void;
   resetSettings: () => void;
+  toggleTheme: () => void;
 }
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
@@ -18,8 +19,29 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     saveStoredSettings(settings);
   }, [settings]);
 
+  // Sync theme with document element classes and data attribute
+  useEffect(() => {
+    const root = document.documentElement;
+    if (settings.theme === 'light') {
+      root.classList.remove('dark');
+      root.classList.add('light');
+      root.setAttribute('data-theme', 'light');
+    } else {
+      root.classList.remove('light');
+      root.classList.add('dark');
+      root.setAttribute('data-theme', 'dark');
+    }
+  }, [settings.theme]);
+
   const updateSettings = (partial: Partial<UserSettings>) => {
     setSettings((prev) => ({ ...prev, ...partial }));
+  };
+
+  const toggleTheme = () => {
+    setSettings((prev) => ({
+      ...prev,
+      theme: prev.theme === 'light' ? 'dark' : 'light',
+    }));
   };
 
   const markSurahCompleted = (surahId: number) => {
@@ -41,6 +63,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateSettings,
         markSurahCompleted,
         resetSettings,
+        toggleTheme,
       }}
     >
       {children}

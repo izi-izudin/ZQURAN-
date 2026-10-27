@@ -79,12 +79,14 @@ export interface ReadingHistory {
 }
 
 export interface UserSettings {
+  theme: 'dark' | 'light';
   arabicFontSize: number; // 24 to 48 px
   translationFontSize: number; // 14 to 22 px
   showTransliteration: boolean;
   showTranslation: boolean;
   arabicFontFamily: 'amiri' | 'scheherazade';
   preferredQari: string; // '01' - '06'
+  showTajwid: boolean; // Tajwid color coding toggle
   dailyTargetType: 'pages' | 'juz' | 'surah';
   dailyTargetValue: number;
   readSurahs: number[]; // array of completed surah IDs

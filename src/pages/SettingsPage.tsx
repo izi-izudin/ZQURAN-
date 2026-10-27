@@ -14,6 +14,7 @@ import {
   Check,
   AlertCircle,
   ExternalLink,
+  Palette,
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import { useAudio } from '../context/AudioContext';
@@ -21,6 +22,8 @@ import { BRANDING, QARI_LIST } from '../config/appConfig';
 import { PWAInstallButton } from '../components/common/PWAInstallButton';
 import { RatingModal } from '../components/modals/RatingModal';
 import { InfoModal } from '../components/modals/InfoModal';
+import { renderTajwidText } from '../utils/tajwidParser';
+import { TajwidLegendModal } from '../components/reader/TajwidLegendModal';
 
 export const SettingsPage: React.FC = () => {
   const { settings, updateSettings, resetSettings } = useSettings();
@@ -29,6 +32,7 @@ export const SettingsPage: React.FC = () => {
   // Modals
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showTajwidModal, setShowTajwidModal] = useState(false);
 
   // Screen Wake Lock State & Detection
   const [wakeLockActive, setWakeLockActive] = useState(false);
@@ -114,14 +118,20 @@ export const SettingsPage: React.FC = () => {
   };
 
   const handleClearCache = () => {
-    if (confirm('Bersihkan seluruh cache ayat tersimpan dan muat ulang?')) {
+    try {
       const keys = Object.keys(localStorage);
+      let count = 0;
       for (const k of keys) {
         if (k.startsWith('zquran_cache_')) {
           localStorage.removeItem(k);
+          count++;
         }
       }
-      window.location.reload();
+      setFullscreenNotice(`Cache tersimpan berhasil dibersihkan (${count} item dihapus).`);
+      setTimeout(() => setFullscreenNotice(null), 3500);
+    } catch {
+      setFullscreenNotice('Tidak dapat mengakses penyimpanan lokal.');
+      setTimeout(() => setFullscreenNotice(null), 3500);
     }
   };
 
@@ -156,18 +166,45 @@ export const SettingsPage: React.FC = () => {
         <h3 className="text-xs font-bold text-[#FFE29A] tracking-wider uppercase px-1">
           Tampilan
         </h3>
-        <div className="rounded-2xl bg-[#051D42] border border-[#0D3169] divide-y divide-[#0D3169]/60">
+        <div className="rounded-2xl bg-[#051D42] light:bg-white border border-[#0D3169] light:border-[#E5DFD5] divide-y divide-[#0D3169]/60 light:divide-[#E5DFD5]">
           <div className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Moon className="w-4 h-4 text-[#FFE29A]" />
+              {settings.theme === 'light' ? (
+                <Sun className="w-4 h-4 text-[#C4922F]" />
+              ) : (
+                <Moon className="w-4 h-4 text-[#FFE29A]" />
+              )}
               <div>
-                <h4 className="text-sm font-semibold text-[#F5F1E6]">Tema Aplikasi</h4>
-                <p className="text-xs text-[#8CA3C7]">Mode gelap tenang ramah mata</p>
+                <h4 className="text-sm font-semibold text-[#F5F1E6] light:text-[#1A202C]">Tema Aplikasi</h4>
+                <p className="text-xs text-[#8CA3C7] light:text-[#64748B]">
+                  {settings.theme === 'light'
+                    ? 'Mode terang ivory white & sage green'
+                    : 'Mode gelap navy tenang & gold glass'}
+                </p>
               </div>
             </div>
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#001F52] border border-[#0D3169] text-[#FFE29A]">
-              Gelap (Aktif)
-            </span>
+            <div className="flex items-center gap-1 bg-[#001F52] light:bg-[#E8F0EC] p-1 rounded-xl border border-[#0D3169] light:border-[#E5DFD5]">
+              <button
+                onClick={() => updateSettings({ theme: 'dark' })}
+                className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  settings.theme !== 'light'
+                    ? 'bg-[#0647A5] text-[#FFE29A] shadow-xs'
+                    : 'text-[#8CA3C7] light:text-[#64748B]'
+                }`}
+              >
+                Gelap
+              </button>
+              <button
+                onClick={() => updateSettings({ theme: 'light' })}
+                className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  settings.theme === 'light'
+                    ? 'bg-[#2E6F52] text-white shadow-xs'
+                    : 'text-[#8CA3C7]'
+                }`}
+              >
+                Terang
+              </button>
+            </div>
           </div>
 
           <div className="p-4 flex items-center justify-between">
@@ -202,8 +239,42 @@ export const SettingsPage: React.FC = () => {
               style={{ fontSize: `${settings.arabicFontSize}px`, lineHeight: 2.3 }}
               dir="rtl"
             >
-              بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
+              {renderTajwidText('بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ', settings.showTajwid)}
             </p>
+          </div>
+
+          {/* Tajwid Berwarna Toggle */}
+          <div className="flex items-center justify-between py-2 border-y border-[#0D3169]/60">
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="text-sm font-semibold text-[#F5F1E6]">Tajwid Berwarna</h4>
+                <button
+                  type="button"
+                  onClick={() => setShowTajwidModal(true)}
+                  aria-label="Buka panduan kaidah tajwid"
+                  className="px-2 py-0.5 rounded-full bg-[#001F52] border border-[#0D3169] text-[10px] text-[#FFE29A] hover:border-[#D9A441] transition cursor-pointer"
+                >
+                  Panduan Warna
+                </button>
+              </div>
+              <p className="text-xs text-[#8CA3C7]">
+                Pewarnaan otomatis kaidah Madd, Ghunnah, Qalqalah, Ikhfa, Idgham, Waqaf
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateSettings({ showTajwid: !settings.showTajwid })}
+              className={`w-12 h-6 rounded-full transition-colors p-0.5 cursor-pointer shrink-0 ${
+                settings.showTajwid ? 'bg-[#0647A5]' : 'bg-[#001F52] border border-[#0D3169]'
+              }`}
+              aria-label="Toggle Tajwid Berwarna"
+            >
+              <div
+                className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                  settings.showTajwid ? 'translate-x-6 bg-[#FFE29A]' : 'translate-x-0'
+                }`}
+              />
+            </button>
           </div>
 
           {/* Jenis Penulisan Arabic */}
@@ -488,6 +559,12 @@ export const SettingsPage: React.FC = () => {
       {/* Modals */}
       <RatingModal isOpen={showRatingModal} onClose={() => setShowRatingModal(false)} />
       <InfoModal isOpen={showInfoModal} onClose={() => setShowInfoModal(false)} />
+      <TajwidLegendModal
+        isOpen={showTajwidModal}
+        onClose={() => setShowTajwidModal(false)}
+        isTajwidEnabled={settings.showTajwid}
+        onToggleTajwid={() => updateSettings({ showTajwid: !settings.showTajwid })}
+      />
     </div>
   );
 };

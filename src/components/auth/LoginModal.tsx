@@ -180,7 +180,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                 <button
                   type="button"
                   onClick={() =>
-                    alert('Silakan hubungi administrator atau masuk sebagai Tamu untuk reset akun.')
+                    setGoogleNotice('Fitur reset password belum dikonfigurasi di lingkungan ini. Anda dapat masuk sebagai Tamu atau menggunakan kata sandi lokal.')
                   }
                   className="text-[#168BFF] hover:text-[#FFE29A] transition cursor-pointer"
                 >

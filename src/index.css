@@ -1,17 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --color-background: #03152F;
+:root,
+:root[data-theme="dark"] {
+  --color-background: #0B1220;
+  --color-background-deep: #03152F;
+  --color-surface: #051D42;
+  --color-surface-hover: #082859;
+  --color-surface-glass: rgba(11, 18, 32, 0.85);
   --color-primary: #0647A5;
   --color-electric: #168BFF;
   --color-midnight: #001F52;
   --color-gold: #D9A441;
   --color-gold-light: #FFE29A;
   --color-pearl: #F5F1E6;
+  --color-muted: #8CA3C7;
+  --color-border: #0D3169;
+  --color-border-gold: rgba(217, 164, 65, 0.35);
 
   /* Fonts */
   --font-arabic: 'Amiri', 'Scheherazade New', serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+:root[data-theme="light"] {
+  --color-background: #FDFBF7;
+  --color-background-deep: #F4EFE6;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8F5EE;
+  --color-surface-glass: rgba(253, 251, 247, 0.90);
+  --color-primary: #2E6F52; /* Sage Green */
+  --color-electric: #3B8F68;
+  --color-midnight: #E8F0EC;
+  --color-gold: #C4922F;
+  --color-gold-light: #D9A441;
+  --color-pearl: #1A202C; /* High contrast text */
+  --color-muted: #64748B;
+  --color-border: #E5DFD5;
+  --color-border-gold: rgba(196, 146, 47, 0.35);
 }
 
 body {
@@ -22,6 +47,7 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 .font-arabic {
@@ -38,6 +64,14 @@ body {
   line-height: 2.2;
 }
 
+/* Glassmorphism utility */
+.glass-gold {
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-gold);
+}
+
 /* Custom subtle scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
@@ -45,16 +79,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #03152F;
+  background: var(--color-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #001F52;
+  background: var(--color-surface);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0647A5;
+  background: var(--color-primary);
 }
 
 /* Accessible focus visible */

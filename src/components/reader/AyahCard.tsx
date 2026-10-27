@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Play, Pause, Bookmark, BookOpen, MoreVertical, Check, Copy, Share2 } from 'lucide-react';
 import type { Ayah, UserSettings } from '../../types/quran';
 import { IslamicNumberBadge } from '../common/IslamicNumberBadge';
+import { renderTajwidText } from '../../utils/tajwidParser';
 
 interface AyahCardProps {
   ayah: Ayah;
@@ -152,7 +153,7 @@ export const AyahCard: React.FC<AyahCardProps> = ({
           dir="rtl"
           lang="ar"
         >
-          {ayah.teksArab}
+          {renderTajwidText(ayah.teksArab, settings.showTajwid)}
         </p>
       </div>
 

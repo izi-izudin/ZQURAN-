@@ -5,12 +5,14 @@ const HISTORY_KEY = 'zquran_reading_history_v1';
 const SETTINGS_KEY = 'zquran_settings_v1';
 
 export const DEFAULT_SETTINGS: UserSettings = {
+  theme: 'dark',
   arabicFontSize: 30, // px
   translationFontSize: 15, // px
   showTransliteration: true,
   showTranslation: true,
   arabicFontFamily: 'amiri',
   preferredQari: '01',
+  showTajwid: true,
   dailyTargetType: 'pages',
   dailyTargetValue: 2,
   readSurahs: [],

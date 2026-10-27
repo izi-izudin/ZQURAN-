@@ -8,6 +8,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  Palette,
 } from 'lucide-react';
 import type { SurahDetail, Ayah } from '../types/quran';
 import { getSurahDetail } from '../api/quranApi';
@@ -26,6 +27,7 @@ import { AyahActionModal } from '../components/reader/AyahActionModal';
 import { TafsirModal } from '../components/reader/TafsirModal';
 import { AutoScrollControl } from '../components/reader/AutoScrollControl';
 import { SurahJumpSelector } from '../components/reader/SurahJumpSelector';
+import { TajwidLegendModal } from '../components/reader/TajwidLegendModal';
 import { AyahSkeleton } from '../components/common/Skeletons';
 import { ErrorState } from '../components/common/ErrorState';
 
@@ -42,7 +44,7 @@ export const QuranReaderPage: React.FC<QuranReaderPageProps> = ({
   onNavigateSurah,
   onBack,
 }) => {
-  const { settings, markSurahCompleted } = useSettings();
+  const { settings, updateSettings, markSurahCompleted } = useSettings();
   const {
     playAyah,
     playSurah,
@@ -55,6 +57,7 @@ export const QuranReaderPage: React.FC<QuranReaderPageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showSurahInfo, setShowSurahInfo] = useState(false);
+  const [showTajwidModal, setShowTajwidModal] = useState(false);
 
   // Modals state
   const [activeAyahAction, setActiveAyahAction] = useState<Ayah | null>(null);
@@ -205,7 +208,7 @@ export const QuranReaderPage: React.FC<QuranReaderPageProps> = ({
     <div className="space-y-6 pb-28 md:pb-20 max-w-4xl mx-auto">
       {/* Top Action Bar: Jump selector & Auto-Scroll Controls */}
       <div className="sticky top-0 md:top-16 z-30 -mx-3.5 sm:-mx-6 px-3.5 sm:px-6 py-2.5 bg-[#03152F] border-b border-[#0D3169] flex flex-wrap items-center justify-between gap-2 shadow-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <SurahJumpSelector
             totalAyah={surahDetail.jumlahAyat}
             currentAyah={1}
@@ -218,6 +221,36 @@ export const QuranReaderPage: React.FC<QuranReaderPageProps> = ({
             <BookOpen className="w-3.5 h-3.5" />
             <span>Tafsir Surat</span>
           </button>
+
+          {/* Tajwid Color Toggle & Info */}
+          <div className="flex items-center gap-1 bg-[#051D42] border border-[#0D3169] rounded-xl p-0.5">
+            <button
+              onClick={() => updateSettings({ showTajwid: !settings.showTajwid })}
+              aria-label={`Toggle Tajwid: ${settings.showTajwid ? 'Aktif' : 'Nonaktif'}`}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                settings.showTajwid
+                  ? 'bg-[#0647A5] text-[#FFE29A]'
+                  : 'text-[#8CA3C7] hover:text-[#F5F1E6]'
+              }`}
+              title="Aktif/Nonaktifkan Tajwid Berwarna"
+            >
+              <Palette className="w-3.5 h-3.5" />
+              <span>Tajwid</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  settings.showTajwid ? 'bg-[#10B981]' : 'bg-[#8CA3C7]/40'
+                }`}
+              />
+            </button>
+            <button
+              onClick={() => setShowTajwidModal(true)}
+              aria-label="Panduan Warna Tajwid"
+              className="p-1 rounded-lg text-[#8CA3C7] hover:text-[#FFE29A] hover:bg-[#001F52] transition cursor-pointer"
+              title="Buka Panduan & Kaidah Tajwid"
+            >
+              <Info className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
         {/* Auto Scroll */}
@@ -379,6 +412,14 @@ export const QuranReaderPage: React.FC<QuranReaderPageProps> = ({
         surahNumber={surahDetail.nomor}
         surahName={surahDetail.namaLatin}
         targetAyahNumber={tafsirModalState.ayahNumber}
+      />
+
+      {/* Tajwid Legend Modal */}
+      <TajwidLegendModal
+        isOpen={showTajwidModal}
+        onClose={() => setShowTajwidModal(false)}
+        isTajwidEnabled={settings.showTajwid}
+        onToggleTajwid={() => updateSettings({ showTajwid: !settings.showTajwid })}
       />
     </div>
   );

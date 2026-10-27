@@ -71,14 +71,45 @@ export const AyahActionModal: React.FC<AyahActionModalProps> = ({
     onBookmarkChanged?.();
   };
 
+  const [feedbackNotice, setFeedbackNotice] = useState<string | null>(null);
+
+  const copyToClipboard = async (text: string): Promise<boolean> => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        // Fall back to execCommand
+      }
+    }
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return success;
+    } catch {
+      return false;
+    }
+  };
+
   const handleCopyText = async () => {
     const textToCopy = `${ayah.teksArab}\n\n"${ayah.teksIndonesia}" (QS. ${surahName} [${surahNumber}]: ${ayah.nomorAyat})`;
-    try {
-      await navigator.clipboard.writeText(textToCopy);
+    const success = await copyToClipboard(textToCopy);
+    if (success) {
       setCopyFeedback(true);
-      setTimeout(() => setCopyFeedback(false), 2000);
-    } catch {
-      // fallback
+      setFeedbackNotice('Ayat berhasil disalin ke papan klip.');
+      setTimeout(() => {
+        setCopyFeedback(false);
+        setFeedbackNotice(null);
+      }, 3000);
+    } else {
+      setFeedbackNotice('Tidak dapat menyalin ayat secara otomatis.');
+      setTimeout(() => setFeedbackNotice(null), 3000);
     }
   };
 
@@ -91,11 +122,21 @@ export const AyahActionModal: React.FC<AyahActionModalProps> = ({
     if (navigator.share) {
       try {
         await navigator.share(shareData);
+        return;
       } catch {
-        // User cancelled share
+        // User cancelled share or failed
       }
+    }
+
+    // Fallback ke clipboard bila Web Share API tidak tersedia / dibatalkan
+    const textToShare = `${ayah.teksArab}\n\n"${ayah.teksIndonesia}"\n(QS. ${surahName}: ${ayah.nomorAyat}) - ZQuran`;
+    const success = await copyToClipboard(textToShare);
+    if (success) {
+      setFeedbackNotice('Ayat berhasil disalin. Silakan bagikan melalui aplikasi pilihan Anda.');
+      setTimeout(() => setFeedbackNotice(null), 3500);
     } else {
-      handleCopyText();
+      setFeedbackNotice('Tidak dapat menyalin ayat secara otomatis.');
+      setTimeout(() => setFeedbackNotice(null), 3500);
     }
   };
 
@@ -124,6 +165,13 @@ export const AyahActionModal: React.FC<AyahActionModalProps> = ({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Feedback Notice Banner */}
+        {feedbackNotice && (
+          <div className="mb-3 p-2.5 rounded-xl bg-[#0647A5]/40 border border-[#D9A441] text-xs text-[#FFE29A] text-center font-medium">
+            {feedbackNotice}
+          </div>
+        )}
 
         {/* Quick Action Buttons Grid */}
         <div className="grid grid-cols-2 gap-2 mb-5">
