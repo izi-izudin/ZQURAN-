@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Clock, BookOpen, Volume2, Sparkles, BellRing } from 'lucide-react';
-import { prayerAudioManager } from '../../services/prayerAudioService';
+import { Clock } from 'lucide-react';
 
 interface PrayerLiveWidgetProps {
   onOpenTilawahSettings?: () => void;
@@ -41,96 +40,104 @@ export const PrayerLiveWidget: React.FC<PrayerLiveWidgetProps> = ({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-      {/* Left Card: Jadwal Sholat Live Countdown (Storyboard Frame 1 & 2) */}
+      {/* Left Card: Jadwal Sholat Live Countdown */}
       <div
         onClick={onOpenPrayerScheduleModal}
-        className="p-4 sm:p-5 rounded-3xl bg-[#051D42]/90 light:bg-white border border-[#0D3169] light:border-[#E5DFD5] shadow-lg flex flex-col justify-between hover:border-[#D9A441]/50 transition cursor-pointer group"
+        className="p-4 sm:p-5 rounded-3xl bg-[#051D42]/85 light:bg-white/85 border border-[#D9A441]/35 light:border-[#E5DFD5] shadow-lg flex flex-col justify-between hover:border-[#D9A441]/60 transition-all cursor-pointer group"
       >
-        <div className="flex items-center justify-between mb-1.5">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#D9A441]" />
-            <span className="text-xs font-semibold text-[#8CA3C7] light:text-[#64748B]">
+            <Clock className="w-4 h-4 text-[#FFE29A] light:text-[#C4922F]" />
+            <span className="text-xs sm:text-sm font-semibold text-[#F5F1E6] light:text-[#1A202C]">
               Jadwal Sholat
             </span>
           </div>
-          <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-[#001F52] border border-[#D9A441]/50 text-[#FFE29A] font-extrabold tracking-wider animate-pulse">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D9A441]" />
-            LIVE COUNTDOWN
+          <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-[#001F52] border border-[#D9A441]/50 text-[#FFE29A] font-extrabold tracking-wider">
+            <span className="text-[#D9A441]">·:·</span>
+            <span>LIVE COUNTDOWN</span>
+            <span className="text-[#D9A441]">·:·</span>
           </span>
         </div>
 
-        <div>
+        <div className="my-1">
           <span className="text-[11px] text-[#8CA3C7] light:text-[#64748B]">
             Sholat Berikutnya:
           </span>
-          <div className="font-mono text-2xl sm:text-3xl font-black text-[#FFE29A] tracking-wider my-0.5">
-            {formatPad(countdown.hours)}:{formatPad(countdown.minutes)}:{formatPad(countdown.seconds)}
+          <div className="flex items-center gap-2 font-mono text-2xl sm:text-3xl font-black text-[#FFE29A] light:text-[#C4922F] tracking-wider my-0.5">
+            <Clock className="w-5 h-5 text-[#FFE29A] light:text-[#C4922F] shrink-0" />
+            <span>
+              {formatPad(countdown.hours)}:{formatPad(countdown.minutes)}:{formatPad(countdown.seconds)}
+            </span>
           </div>
-          <p className="text-[11px] text-[#8CA3C7] light:text-[#64748B]">
+          <p className="text-[10px] sm:text-[11px] text-[#8CA3C7] light:text-[#64748B]">
             Waktu sekarang • {currentTimeStr} WIB • Diperbarui: baru saja
           </p>
         </div>
 
-        <div className="mt-3 pt-2.5 border-t border-[#0D3169]/60 light:border-[#E5DFD5] flex items-center justify-between text-[11px] text-[#FFE29A] light:text-[#2E6F52] font-semibold">
-          <span>Progres Tilawah Harian</span>
-          <span>Detail Jadwal →</span>
+        <div className="mt-3 pt-2.5 border-t border-[#0D3169]/60 light:border-[#E5DFD5] text-center">
+          <span className="text-xs sm:text-sm font-bold text-[#F5F1E6] light:text-[#1A202C] group-hover:text-[#FFE29A] light:group-hover:text-[#2E6F52] transition-colors">
+            Progres Tilawah Harian
+          </span>
         </div>
       </div>
 
-      {/* Right Card: Progress Tilawah 70% (Storyboard Frame 1 & 2) */}
+      {/* Right Card: Progress Tilawah 70% Menuju Maghrib */}
       <div
         onClick={onOpenTilawahSettings}
-        className="p-4 sm:p-5 rounded-3xl bg-[#051D42]/90 light:bg-white border border-[#0D3169] light:border-[#E5DFD5] shadow-lg flex flex-col justify-between hover:border-[#D9A441]/50 transition cursor-pointer group"
+        className="p-4 sm:p-5 rounded-3xl bg-[#051D42]/85 light:bg-white/85 border border-[#D9A441]/35 light:border-[#E5DFD5] shadow-lg flex flex-col justify-between hover:border-[#D9A441]/60 transition-all cursor-pointer group"
       >
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-2">
-            <div className="relative w-7 h-7 flex items-center justify-center">
-              <svg className="w-7 h-7 -rotate-90" viewBox="0 0 36 36">
-                <path
-                  className="text-[#001F52] light:text-[#E5DFD5]"
-                  strokeWidth="4"
-                  stroke="currentColor"
-                  fill="none"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-                <path
-                  className="text-[#D9A441]"
-                  strokeDasharray="70, 100"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  stroke="currentColor"
-                  fill="none"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
-              </svg>
-              <span className="absolute font-black text-[9px] text-[#FFE29A] light:text-[#2E6F52]">
-                70%
-              </span>
-            </div>
-            <span className="text-xs font-semibold text-[#8CA3C7] light:text-[#64748B]">
-              Menuju Maghrib
+        <div className="flex flex-col items-center justify-center my-1">
+          {/* Radial Ring Gauge */}
+          <div className="relative w-14 h-14 flex items-center justify-center mb-1">
+            <svg className="w-14 h-14 -rotate-90" viewBox="0 0 36 36">
+              <path
+                className="text-[#001F52] light:text-[#E5DFD5]"
+                strokeWidth="3.5"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className="text-[#FFE29A] light:text-[#D9A441]"
+                strokeDasharray="70, 100"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                stroke="currentColor"
+                fill="none"
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <span className="absolute font-black text-xs text-[#FFE29A] light:text-[#2E6F52]">
+              70%
             </span>
           </div>
-
-          <span className="text-[11px] text-[#8CA3C7] light:text-[#64748B]">
-            Estimasi Maghrib: 17:52
+          <span className="text-xs font-semibold text-[#F5F1E6] light:text-[#1A202C]">
+            Menuju Maghrib
+          </span>
+          <span className="text-[10px] text-[#8CA3C7] light:text-[#64748B]">
+            Estimasi Maghrib: 14:12
           </span>
         </div>
 
-        <div>
-          <div className="flex items-center justify-between text-xs font-bold text-[#F5F1E6] light:text-[#1A202C]">
-            <span>Hari ini: 12/20 halaman</span>
-            <span className="text-[#FFE29A] light:text-[#2E6F52]">60% selesai</span>
+        {/* Progress Bars */}
+        <div className="space-y-1.5 mt-2">
+          <div>
+            <div className="w-full h-1.5 rounded-full bg-[#001F52] light:bg-[#E5DFD5] overflow-hidden">
+              <div className="h-full rounded-full bg-[#168BFF] light:bg-[#2E6F52] w-[60%]" />
+            </div>
+            <p className="text-[10px] text-center text-[#8CA3C7] light:text-[#64748B] mt-0.5">
+              Hari ini: 12/20 halaman • 60% selesai
+            </p>
           </div>
 
-          <div className="w-full h-2 rounded-full bg-[#001F52] light:bg-[#E5DFD5] mt-2 overflow-hidden">
-            <div className="h-full rounded-full bg-gradient-to-r from-[#0647A5] to-[#D9A441] w-[60%]" />
+          <div>
+            <div className="w-full h-1.5 rounded-full bg-[#001F52] light:bg-[#E5DFD5] overflow-hidden">
+              <div className="h-full rounded-full bg-[#D9A441] w-[75%]" />
+            </div>
+            <p className="text-[10px] text-center text-[#8CA3C7] light:text-[#64748B] mt-0.5">
+              Target Bulan ini: 500 Halaman
+            </p>
           </div>
-        </div>
-
-        <div className="mt-3 pt-2.5 border-t border-[#0D3169]/60 light:border-[#E5DFD5] flex items-center justify-between text-[11px] text-[#8CA3C7] light:text-[#64748B]">
-          <span>Target Bulan Ini: 500 Halaman</span>
-          <span className="text-[#168BFF] light:text-[#2E6F52] font-semibold">Atur Target →</span>
         </div>
       </div>
     </div>
